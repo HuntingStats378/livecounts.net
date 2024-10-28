@@ -45,9 +45,8 @@ setInterval(() => {
       ).style.display = data.isStudio ? "block" : "none";
 
       const image = document.getElementById("image");
-      image.src =
-        data.user[1].count;
-      image.alt = data.snippet.title;
+      image.src = data.user[1].count;
+      image.alt = data.user[0].count;
       document.getElementById("subscribers").innerHTML = data.counts[0].count;
       document.getElementById("goal").innerHTML = GetGoal(data.counts[0].count);
       document.getElementById(
