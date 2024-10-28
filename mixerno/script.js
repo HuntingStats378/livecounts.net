@@ -29,32 +29,31 @@ function GetGoalText(t) {
 
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id") || "UCX6OQ3DkcsbYNE6H8uQQuVA";
+const theme = params.get("theme") || "light";
 document.getElementById("imageLink").href = `https://youtube.com/channel/${id}`;
 document.getElementById(
   "subscribeBtn"
 ).href = `https://youtube.com/channel/${id}?sub_confirmation=1`;
 
 setInterval(() => {
-  fetch(`https://axern.space/api/get?platform=youtube&type=channel&id=${id}`)
+  fetch(`https://mixerno.space/api/youtube-channel-counter/user/${id}`)
     .then((res) => res.json())
     .then((data) => {
-      document.getElementById("name").textContent = data.snippet.title;
+      document.getElementById("name").textContent = data.user[0].count;
       document.querySelector(
         '[data-icon="zondicons:checkmark"]'
       ).style.display = data.isStudio ? "block" : "none";
 
       const image = document.getElementById("image");
       image.src =
-        data.snippet.thumbnails.high.url ||
-        data.snippet.thumbnails.medium.url ||
-        data.snippet.thumbnails.default.url;
+        data.user[1].count;
       image.alt = data.snippet.title;
-      document.getElementById("subscribers").innerHTML = data.estSubCount;
-      document.getElementById("goal").innerHTML = GetGoal(data.estSubCount);
+      document.getElementById("subscribers").innerHTML = data.counts[0].count;
+      document.getElementById("goal").innerHTML = GetGoal(data.counts[0].count);
       document.getElementById(
         "goalText"
       ).textContent = `subscribers to ${GetGoalText(
-        GetGoal2(data.estSubCount)
+        GetGoal2(data.counts[0].count)
       )}`;
     });
 }, 2000);
@@ -85,10 +84,10 @@ function search() {
   const prompt = window.prompt("Enter channel name, ID, or URL.");
   if (prompt)
     fetch(
-      `https://axern.space/api/search?platform=youtube&type=channel&query=${prompt}`
+      `https://mixerno.space/api/youtube-channel-counter/search/${prompt}`
     )
       .then((res) => res.json())
       .then((data) => {
-        window.location.href = "?id=" + data[0].id;
+        window.location.href = "?id=" + data.list[0][2];
       });
 }
